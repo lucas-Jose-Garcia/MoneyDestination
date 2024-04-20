@@ -1,5 +1,5 @@
-import { Feather } from '@expo/vector-icons';
-import { Button, Text } from 'tamagui';
+import { ChevronLeft } from '@tamagui/lucide-icons';
+import { Button } from 'tamagui';
 
 export const BackButton = ({ onPress }: { onPress: () => void }) => {
   return (
@@ -11,9 +11,8 @@ export const BackButton = ({ onPress }: { onPress: () => void }) => {
         opacity: 0.5,
       }}
       paddingLeft={20}
-      onPress={onPress}
-      icon={<Feather name="chevron-left" size={16} color="#007AFF" />}>
-      <Text color="#007AFF">Back</Text>
+      onPress={onPress}>
+      <ChevronLeft />
     </Button>
   );
 };

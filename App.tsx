@@ -3,9 +3,9 @@ import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect } from 'react';
-import { TamaguiProvider } from 'tamagui';
+import { TamaguiProvider, Theme } from 'tamagui';
 
-import RootStack from './navigation';
+import RootStack from './src/navigation';
 import config from './tamagui.config';
 
 SplashScreen.preventAutoHideAsync();
@@ -28,7 +28,9 @@ export default function App() {
 
   return (
     <TamaguiProvider config={config}>
-      <RootStack />
+      <Theme name="light">
+        <RootStack />
+      </Theme>
     </TamaguiProvider>
   );
 }
