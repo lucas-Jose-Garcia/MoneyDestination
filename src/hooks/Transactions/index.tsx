@@ -8,6 +8,8 @@ export function useTransactions() {
   const [destination, setDestination] = useState('');
   const [reference, setReference] = useState('');
   const [value, setValue] = useState('');
+  const [isCreditCard, setIsCreditCard] = useState(false);
+  const [isPaid, setIsPaid] = useState(true);
 
   return {
     states: {
@@ -25,6 +27,10 @@ export function useTransactions() {
       setReference,
       value,
       setValue,
+      isCreditCard,
+      setIsCreditCard,
+      isPaid,
+      setIsPaid,
     },
   };
 }

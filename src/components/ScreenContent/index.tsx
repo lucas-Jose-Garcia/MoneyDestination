@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ViewStyle,
 } from 'react-native';
+import { useTheme } from 'tamagui';
 
 interface ScreenContentProps {
   children: ReactNode;
@@ -21,21 +22,26 @@ export function ScreenContent({
   scrollViewRef,
 }: ScreenContentProps) {
   const headerHeight = useHeaderHeight();
+  const theme = useTheme();
 
   const renderScrollView = (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        gap: 13,
-        paddingTop: 18,
-        paddingHorizontal: 18,
-        ...scrollContentContainerStyle,
-      }}
-      contentInsetAdjustmentBehavior="never"
-      keyboardShouldPersistTaps="handled"
-      ref={scrollViewRef}>
-      {children}
-    </ScrollView>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ backgroundColor: theme.background.val }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          gap: 13,
+          paddingTop: 18,
+          paddingHorizontal: 18,
+          ...scrollContentContainerStyle,
+        }}
+        contentInsetAdjustmentBehavior="never"
+        keyboardShouldPersistTaps="handled"
+        ref={scrollViewRef}
+        overScrollMode="never">
+        {children}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 
   if (Platform.OS === 'android') return renderScrollView;

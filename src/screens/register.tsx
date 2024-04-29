@@ -1,6 +1,6 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { useState } from 'react';
-import { Button, StyleSheet } from 'react-native';
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useCallback } from 'react';
 
 import { RootStackParamList } from '../navigation';
 
@@ -8,14 +8,33 @@ import { DatePicker } from '~/components/DatePicker';
 import { InputText } from '~/components/InputText';
 import { ScreenContent } from '~/components/ScreenContent';
 import { Select } from '~/components/Select';
+import { SwitchWithLabel } from '~/components/SwitchWithLabel';
 import { useTransactions } from '~/hooks/Transactions';
 
 type RegisterSreenRouteProp = RouteProp<RootStackParamList, 'Register'>;
 
+type RegisterScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Register'>;
+
 export default function Register() {
   const router = useRoute<RegisterSreenRouteProp>();
+  const navigation = useNavigation<RegisterScreenNavigationProps>();
 
   const { states } = useTransactions();
+
+  function onCheckCreditCard() {
+    if (!states.isCreditCard && states.isPaid) states.setIsPaid(false);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({
+        title: `Cadastrar ${router.params.type}`,
+        headerStyle: {
+          backgroundColor: router.params.bg,
+        },
+      });
+    }, [])
+  );
 
   return (
     <ScreenContent>
@@ -24,6 +43,12 @@ export default function Register() {
         setVisible={states.setShowDatePicker}
         val={states.date}
         setVal={states.setDate}
+      />
+      <InputText
+        label="Valor"
+        val={states.value}
+        setVal={states.setValue}
+        keyboardType="number-pad"
       />
       <Select
         label="Categoria"
@@ -60,11 +85,17 @@ export default function Register() {
         setVal={states.setReference}
         data={['Março - 2024', 'Abril - 2024']}
       />
-      <InputText
-        label="Valor"
-        val={states.value}
-        setVal={states.setValue}
-        keyboardType="number-pad"
+
+      <SwitchWithLabel
+        labelText="Cartão de Crédito"
+        isEnabled={states.isCreditCard}
+        setToggleSwitch={states.setIsCreditCard}
+        onCheckChange={onCheckCreditCard}
+      />
+      <SwitchWithLabel
+        labelText="Pago"
+        isEnabled={states.isPaid}
+        setToggleSwitch={states.setIsPaid}
       />
     </ScreenContent>
   );

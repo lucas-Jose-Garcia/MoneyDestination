@@ -18,7 +18,6 @@ export function Sheet({ children, open, onOpenChange, snapPoints, snapPointsMode
         Keyboard.dismiss();
         onOpenChange(open);
       }}
-      native
       modal
       dismissOnSnapToBottom
       animationConfig={{
@@ -27,11 +26,11 @@ export function Sheet({ children, open, onOpenChange, snapPoints, snapPointsMode
         mass: 1.2,
         stiffness: 250,
       }}>
-      <TSheet.Frame borderTopStartRadius="$5" borderTopEndRadius="$5">
+      <TSheet.Frame borderTopStartRadius="$5" borderTopEndRadius="$5" bg="$backgroundPress">
         {snapPoints && <TSheet.Handle backgroundColor="$gray6" mt="$3" />}
-        <TSheet.ScrollView>{children}</TSheet.ScrollView>
+        <TSheet.ScrollView bg="$backgroundPress">{children}</TSheet.ScrollView>
       </TSheet.Frame>
-      <TSheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+      <TSheet.Overlay animation="lazy" enterStyle={{ opacity: 1 }} exitStyle={{ opacity: 0 }} />
     </TSheet>
   );
 }

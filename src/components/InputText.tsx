@@ -15,7 +15,7 @@ export function InputText({ label, val, setVal = () => {}, ...rest }: InputTextP
     <YStack>
       {label && <Label>{label}</Label>}
 
-      <Input value={val} onChangeText={(text) => setVal(text)} {...rest} />
+      <Input value={val} onChangeText={(text) => setVal(text)} bg="$backgroundPress" {...rest} />
     </YStack>
   );
 }

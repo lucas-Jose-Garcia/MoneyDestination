@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useTheme } from 'tamagui';
 
 import { BackButton } from '../components/BackButton';
 
@@ -8,15 +9,21 @@ import Register from '~/screens/register';
 
 export type RootStackParamList = {
   Overview: undefined;
-  Register: { name: string };
+  Register: { type: 'Receita' | 'Despesa' | 'Investimento'; bg: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStack() {
+  const theme = useTheme();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Overview">
+      <Stack.Navigator
+        initialRouteName="Overview"
+        screenOptions={{
+          headerStyle: { backgroundColor: theme.backgroundStrong.val },
+          headerTitleStyle: { color: theme.color.val },
+        }}>
         <Stack.Screen name="Overview" component={Overview} options={{ title: 'Visão Geral' }} />
         <Stack.Screen
           name="Register"

@@ -39,7 +39,11 @@ export function Select<T extends string | undefined>({
     <YStack w={customWidth[size]} {...(flex && { flex: 1 })}>
       {label && <Label>{label}</Label>}
       <TSelect value={val} onValueChange={handleValueChange}>
-        <TSelect.Trigger iconAfter={ChevronDown} borderWidth="$0.5" borderColor="$gray6">
+        <TSelect.Trigger
+          iconAfter={ChevronDown}
+          borderWidth="$0.5"
+          borderColor="$gray6"
+          bg="$backgroundPress">
           <TSelect.Value placeholder={placeholder}>
             <Text>{val}</Text>
           </TSelect.Value>
