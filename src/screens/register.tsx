@@ -1,8 +1,8 @@
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useCallback } from 'react';
 
-import { RootStackParamList } from '../navigation';
+import { RootDrawerParamList } from '../navigation';
 
 import { DatePicker } from '~/components/DatePicker';
 import { InputText } from '~/components/InputText';
@@ -11,9 +11,9 @@ import { Select } from '~/components/Select';
 import { SwitchWithLabel } from '~/components/SwitchWithLabel';
 import { useTransactions } from '~/hooks/Transactions';
 
-type RegisterSreenRouteProp = RouteProp<RootStackParamList, 'Register'>;
+type RegisterSreenRouteProp = RouteProp<RootDrawerParamList, 'Register'>;
 
-type RegisterScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Register'>;
+type RegisterScreenNavigationProps = DrawerNavigationProp<RootDrawerParamList, 'Register'>;
 
 export default function Register() {
   const router = useRoute<RegisterSreenRouteProp>();
@@ -33,7 +33,7 @@ export default function Register() {
           backgroundColor: router.params.bg,
         },
       });
-    }, [])
+    }, [router])
   );
 
   return (

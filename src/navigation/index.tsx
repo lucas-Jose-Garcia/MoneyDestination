@@ -1,31 +1,38 @@
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { useTheme } from 'tamagui';
 
+import { CustomDrawerContent } from './CustomDrawerContent';
+import { CustomHeader } from './CustomHeader';
 import { BackButton } from '../components/BackButton';
 
+import Categories from '~/screens/categories';
 import Overview from '~/screens/overview';
 import Register from '~/screens/register';
 
-export type RootStackParamList = {
+export type RootDrawerParamList = {
   Overview: undefined;
   Register: { type: 'Receita' | 'Despesa' | 'Investimento'; bg: string };
+  Categories: undefined;
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function RootStack() {
   const theme = useTheme();
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <Drawer.Navigator
         initialRouteName="Overview"
         screenOptions={{
           headerStyle: { backgroundColor: theme.backgroundStrong.val },
           headerTitleStyle: { color: theme.color.val },
-        }}>
-        <Stack.Screen name="Overview" component={Overview} options={{ title: 'Visão Geral' }} />
-        <Stack.Screen
+          headerLeft: () => <CustomHeader />,
+        }}
+        drawerContent={(props) => <CustomDrawerContent {...props} />}>
+        <Drawer.Screen name="Overview" component={Overview} options={{ title: 'Visão Geral' }} />
+        <Drawer.Screen name="Categories" component={Categories} options={{ title: 'Categorias' }} />
+        <Drawer.Screen
           name="Register"
           component={Register}
           options={({ navigation }) => ({
@@ -33,7 +40,7 @@ export default function RootStack() {
             headerLeft: () => <BackButton onPress={navigation.goBack} />,
           })}
         />
-      </Stack.Navigator>
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

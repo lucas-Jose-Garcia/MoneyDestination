@@ -1,10 +1,10 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useState } from 'react';
 import { useTheme } from 'tamagui';
 
-import { RootStackParamList } from '../navigation';
+import { RootDrawerParamList } from '../navigation';
 
 import { FabButton } from '~/components/FabButton';
 import { CircleProgress } from '~/components/ProgressCircle';
@@ -13,7 +13,7 @@ import { SheetOptions } from '~/components/SheetOptions';
 import { SummaryCard } from '~/components/SummaryCard';
 import { SummaryIcon } from '~/components/SummaryCard/SummaryIcon';
 
-type OverviewScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Overview'>;
+type OverviewScreenNavigationProps = DrawerNavigationProp<RootDrawerParamList, 'Overview'>;
 
 export default function Overview() {
   const theme = useTheme();
