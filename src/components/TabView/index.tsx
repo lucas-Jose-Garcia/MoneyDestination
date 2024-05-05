@@ -22,8 +22,6 @@ interface TabViewProps {
 
 const TabButton = React.forwardRef((props: TabButtonProps, ref: React.Ref<PagerView> | null) => {
   const active = props.index === props.currentIndex;
-  console.log('props', props);
-
   return (
     <TouchableOpacity
       style={{ width: '33%' }}
@@ -41,7 +39,7 @@ const TabButton = React.forwardRef((props: TabButtonProps, ref: React.Ref<PagerV
         btrr="$2"
         btlr="$2"
         bbw="$1.5"
-        borderColor={active ? props.color : '$background'}>
+        borderColor={active ? props.color : '$backgroundFocus'}>
         <Text color="$color">{props.label}</Text>
       </View>
     </TouchableOpacity>

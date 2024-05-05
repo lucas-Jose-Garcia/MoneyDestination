@@ -1,10 +1,122 @@
 import React, { useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
-import { ScrollView, Text, View } from 'tamagui';
+import { ScrollView, View } from 'tamagui';
 
 import { ScreenContent } from '~/components/ScreenContent';
 import { TabView } from '~/components/TabView';
+import { Tag, TagProps } from '~/components/Tag';
+
+const mockReceitas: TagProps[] = [
+  {
+    icon: { bg: '$green5', name: 'attach-money' },
+    label: 'Salário',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$green5', name: 'attach-money' },
+    label: 'Adiantamento',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$green5', name: 'attach-money' },
+    label: 'Adicionais',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$green5', name: 'attach-money' },
+    label: 'Renda Extra',
+    value: 0,
+    onPress: () => {},
+  },
+];
+
+const mockDespesas: TagProps[] = [
+  {
+    icon: { bg: '$red5', name: 'restaurant-menu' },
+    label: 'Alimentação',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'fastfood' },
+    label: 'Lanches',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'car-repair' },
+    label: 'Carro',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'health-and-safety' },
+    label: 'Saúde',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'checkroom' },
+    label: 'Vestuário',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'home-mini' },
+    label: 'Utilidades',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'volunteer-activism' },
+    label: 'Doações',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$red5', name: 'beach-access' },
+    label: 'Lazer',
+    value: 0,
+    onPress: () => {},
+  },
+];
+
+const mockInvestimentos: TagProps[] = [
+  {
+    icon: { bg: '$orange5', name: 'attach-money' },
+    label: 'Reserva',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$orange5', name: 'trending-up' },
+    label: 'Ações',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$orange5', name: 'domain' },
+    label: 'FIs',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$orange5', name: 'elderly' },
+    label: 'Previdência',
+    value: 0,
+    onPress: () => {},
+  },
+  {
+    icon: { bg: '$orange5', name: 'track-changes' },
+    label: 'Metas',
+    value: 0,
+    onPress: () => {},
+  },
+];
 
 export default function Categories() {
   const refPagerView = useRef<PagerView>(null);
@@ -13,8 +125,8 @@ export default function Categories() {
   const onPageSelected = (event: PagerViewOnPageSelectedEvent) => {
     const { position } = event.nativeEvent;
     setCurrentPage(position);
-    console.log('Página selecionada:', position);
   };
+
   return (
     <ScreenContent>
       <TabView
@@ -25,7 +137,7 @@ export default function Categories() {
           {
             index: 0,
             label: 'Receitas',
-            color: '$blue8',
+            color: '$green8',
           },
           {
             index: 1,
@@ -40,15 +152,26 @@ export default function Categories() {
         ]}>
         <View style={styles.page} key="1">
           <ScrollView>
-            <Text color="$color">First page</Text>
-            <Text color="$color">Swipe ➡️</Text>
+            <View flex={1} gap="$3">
+              {mockReceitas.map((item) => (
+                <Tag key={item.label} {...item} />
+              ))}
+            </View>
           </ScrollView>
         </View>
         <View style={styles.page} key="2">
-          <Text color="$color">Second page</Text>
+          <View flex={1} gap="$3">
+            {mockDespesas.map((item) => (
+              <Tag key={item.label} {...item} />
+            ))}
+          </View>
         </View>
         <View style={styles.page} key="3">
-          <Text color="$color">Third page</Text>
+          <View flex={1} gap="$3">
+            {mockInvestimentos.map((item) => (
+              <Tag key={item.label} {...item} />
+            ))}
+          </View>
         </View>
       </TabView>
     </ScreenContent>
