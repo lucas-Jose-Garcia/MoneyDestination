@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import { ScrollView, View } from 'tamagui';
 
+import { FabButton, FabButtonColor } from '~/components/FabButton';
 import { ScreenContent } from '~/components/ScreenContent';
 import { TabView } from '~/components/TabView';
 import { Tag, TagProps } from '~/components/Tag';
@@ -121,6 +122,7 @@ const mockInvestimentos: TagProps[] = [
 export default function Categories() {
   const refPagerView = useRef<PagerView>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const colorsButton: FabButtonColor[] = ['green', 'red', 'orange'];
 
   const onPageSelected = (event: PagerViewOnPageSelectedEvent) => {
     const { position } = event.nativeEvent;
@@ -128,53 +130,60 @@ export default function Categories() {
   };
 
   return (
-    <ScreenContent>
-      <TabView
-        ref={refPagerView}
-        currentIndex={currentPage}
-        onPageSelected={onPageSelected}
-        itens={[
-          {
-            index: 0,
-            label: 'Receitas',
-            color: '$green8',
-          },
-          {
-            index: 1,
-            label: 'Despesas',
-            color: '$red8',
-          },
-          {
-            index: 2,
-            label: 'Investimentos',
-            color: '$orange8',
-          },
-        ]}>
-        <View style={styles.page} key="1">
-          <ScrollView>
-            <View flex={1} gap="$3">
-              {mockReceitas.map((item) => (
-                <Tag key={item.label} {...item} />
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-        <View style={styles.page} key="2">
-          <View flex={1} gap="$3">
-            {mockDespesas.map((item) => (
-              <Tag key={item.label} {...item} />
-            ))}
+    <>
+      <ScreenContent>
+        <TabView
+          ref={refPagerView}
+          currentIndex={currentPage}
+          onPageSelected={onPageSelected}
+          itens={[
+            {
+              index: 0,
+              label: 'Receitas',
+              color: '$green8',
+            },
+            {
+              index: 1,
+              label: 'Despesas',
+              color: '$red8',
+            },
+            {
+              index: 2,
+              label: 'Investimentos',
+              color: '$orange8',
+            },
+          ]}>
+          <View style={styles.page} key="1">
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View flex={1} gap="$3" pb="$12">
+                {mockReceitas.map((item) => (
+                  <Tag key={item.label} {...item} />
+                ))}
+              </View>
+            </ScrollView>
           </View>
-        </View>
-        <View style={styles.page} key="3">
-          <View flex={1} gap="$3">
-            {mockInvestimentos.map((item) => (
-              <Tag key={item.label} {...item} />
-            ))}
+          <View style={styles.page} key="2">
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View flex={1} gap="$3" pb="$12">
+                {mockDespesas.map((item) => (
+                  <Tag key={item.label} {...item} />
+                ))}
+              </View>
+            </ScrollView>
           </View>
-        </View>
-      </TabView>
-    </ScreenContent>
+          <View style={styles.page} key="3">
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View flex={1} gap="$3" pb="$12">
+                {mockInvestimentos.map((item) => (
+                  <Tag key={item.label} {...item} />
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        </TabView>
+      </ScreenContent>
+      <FabButton icon="plus" bg={colorsButton[currentPage]} whichSide="right" onPress={() => {}} />
+    </>
   );
 }
 

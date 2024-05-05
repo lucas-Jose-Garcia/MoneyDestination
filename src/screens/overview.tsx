@@ -125,7 +125,7 @@ export default function Overview() {
         />
       </ScreenContent>
 
-      <FabButton icon="plus" whichSide="right" onPress={() => setIsOpenModal(true)} />
+      <FabButton icon="plus" bg="blue" whichSide="right" onPress={() => setIsOpenModal(true)} />
 
       <SheetOptions
         open={isOpenModal}

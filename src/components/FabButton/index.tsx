@@ -2,15 +2,27 @@ import { Feather } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { useTheme } from 'tamagui';
 
+export type FabButtonColor = 'blue' | 'green' | 'red' | 'orange';
+
 interface FabButtonProps extends TouchableOpacityProps {
   icon: keyof typeof Feather.glyphMap;
+  bg: FabButtonColor;
   whichSide: 'right' | 'left';
   disabled?: boolean;
 }
 
-export function FabButton({ icon, whichSide, disabled, ...rest }: FabButtonProps) {
+export function FabButton({ icon, bg, whichSide, disabled, ...rest }: FabButtonProps) {
   const theme = useTheme();
-  const background = theme.background.val;
+  const colorIcon = theme.background.val;
+
+  const colors = {
+    blue: theme.blue10.val,
+    green: theme.green10.val,
+    red: theme.red10.val,
+    orange: theme.orange10.val,
+  };
+
+  const backgroundColor = colors[bg];
 
   const styles = StyleSheet.create({
     defaut: {
@@ -29,7 +41,7 @@ export function FabButton({ icon, whichSide, disabled, ...rest }: FabButtonProps
       right: 16,
     },
     active: {
-      backgroundColor: theme.blue10.val,
+      backgroundColor,
     },
     disabled: {
       backgroundColor: theme.gray8.val,
@@ -45,7 +57,7 @@ export function FabButton({ icon, whichSide, disabled, ...rest }: FabButtonProps
       ]}
       activeOpacity={disabled ? 1 : 0.7}
       {...rest}>
-      <Feather name={icon} size={24} color={background} />
+      <Feather name={icon} size={24} color={colorIcon} />
     </TouchableOpacity>
   );
 }
