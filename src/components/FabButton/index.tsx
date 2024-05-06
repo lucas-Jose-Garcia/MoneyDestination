@@ -2,11 +2,11 @@ import { Feather } from '@expo/vector-icons';
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { useTheme } from 'tamagui';
 
-export type FabButtonColor = 'blue' | 'green' | 'red' | 'orange';
+import { ColorsOptions } from '../values/customColors';
 
 interface FabButtonProps extends TouchableOpacityProps {
   icon: keyof typeof Feather.glyphMap;
-  bg: FabButtonColor;
+  bg: ColorsOptions;
   whichSide: 'right' | 'left';
   disabled?: boolean;
 }

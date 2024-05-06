@@ -3,10 +3,13 @@ import { StyleSheet } from 'react-native';
 import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import { ScrollView, View } from 'tamagui';
 
-import { FabButton, FabButtonColor } from '~/components/FabButton';
+import { MaterialIconsName } from '~/components/ButtonIcon';
+import { FabButton } from '~/components/FabButton';
 import { ScreenContent } from '~/components/ScreenContent';
+import { SheetCategories, TypeCategory } from '~/components/SheetCategories';
 import { TabView } from '~/components/TabView';
 import { Tag, TagProps } from '~/components/Tag';
+import { ColorsOptions } from '~/components/values/customColors';
 
 const mockReceitas: TagProps[] = [
   {
@@ -122,11 +125,20 @@ const mockInvestimentos: TagProps[] = [
 export default function Categories() {
   const refPagerView = useRef<PagerView>(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const colorsButton: FabButtonColor[] = ['green', 'red', 'orange'];
+  const colorsButton: ColorsOptions[] = ['green', 'red', 'orange'];
+  const typeCategory: TypeCategory[] = ['Receita', 'Despesa', 'Investimento'];
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [category, setCategory] = useState('');
+  const [activeIcon, setActiveIcon] = useState<MaterialIconsName | null>(null);
 
   const onPageSelected = (event: PagerViewOnPageSelectedEvent) => {
     const { position } = event.nativeEvent;
     setCurrentPage(position);
+  };
+
+  const toggleModal = () => {
+    setIsOpenModal((prevState) => !prevState);
   };
 
   return (
@@ -182,7 +194,20 @@ export default function Categories() {
           </View>
         </TabView>
       </ScreenContent>
-      <FabButton icon="plus" bg={colorsButton[currentPage]} whichSide="right" onPress={() => {}} />
+      <FabButton
+        icon="plus"
+        bg={colorsButton[currentPage]}
+        whichSide="right"
+        onPress={toggleModal}
+      />
+      <SheetCategories
+        color={colorsButton[currentPage]}
+        open={isOpenModal}
+        onOpenChange={setIsOpenModal}
+        type={typeCategory[currentPage]}
+        category={{ val: category, setVal: setCategory }}
+        icon={{ val: activeIcon, setVal: setActiveIcon }}
+      />
     </>
   );
 }
