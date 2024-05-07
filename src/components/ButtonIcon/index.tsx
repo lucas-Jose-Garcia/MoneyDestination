@@ -2,7 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { ColorTokens, View } from 'tamagui';
 
-export type MaterialIconsName = keyof typeof MaterialIcons.glyphMap;
+import { MaterialIconsName } from '~/types/Tables/Category';
 
 interface ButtonIconProps extends TouchableOpacityProps {
   name: MaterialIconsName;

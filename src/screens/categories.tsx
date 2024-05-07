@@ -3,13 +3,13 @@ import { StyleSheet } from 'react-native';
 import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import { ScrollView, View } from 'tamagui';
 
-import { MaterialIconsName } from '~/components/ButtonIcon';
 import { FabButton } from '~/components/FabButton';
 import { ScreenContent } from '~/components/ScreenContent';
 import { SheetCategories, TypeCategory } from '~/components/SheetCategories';
 import { TabView } from '~/components/TabView';
 import { Tag, TagProps } from '~/components/Tag';
 import { ColorsOptions } from '~/components/values/customColors';
+import { MaterialIconsName } from '~/types/Tables/Category';
 
 const mockReceitas: TagProps[] = [
   {
