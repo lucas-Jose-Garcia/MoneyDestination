@@ -12,6 +12,7 @@ import { ScreenContent } from '~/components/ScreenContent';
 import { SheetOptions } from '~/components/SheetOptions';
 import { SummaryCard } from '~/components/SummaryCard';
 import { SummaryIcon } from '~/components/SummaryCard/SummaryIcon';
+import { databaseService } from '~/service/database';
 
 type OverviewScreenNavigationProps = DrawerNavigationProp<RootDrawerParamList, 'Overview'>;
 
@@ -137,14 +138,25 @@ export default function Overview() {
             bg: '$green6',
             onPress: () =>
               navigation.navigate('Register', { type: 'Receita', bg: theme.green6.val }),
-            onPressFast: () => {},
+            onPressFast: async () => {
+              await databaseService.createTable({
+                name: 'teste',
+                columns: [
+                  { name: 'descricao', type: 'varchar', limit: 100, not_null: true },
+                  { name: 'valor', type: 'interger', not_null: true },
+                ],
+              });
+            },
           },
           {
             text: 'Despesa',
             icon: 'minus-circle',
             bg: '$red6',
             onPress: () => navigation.navigate('Register', { type: 'Despesa', bg: theme.red6.val }),
-            onPressFast: () => {},
+            onPressFast: async () => {
+              const teste = await databaseService.select('teste');
+              console.log(JSON.stringify(teste));
+            },
           },
           {
             text: 'Investimento',
@@ -152,7 +164,10 @@ export default function Overview() {
             bg: '$orange6',
             onPress: () =>
               navigation.navigate('Register', { type: 'Investimento', bg: theme.orange6.val }),
-            onPressFast: () => {},
+            onPressFast: async () => {
+              const teste = await databaseService.insert('teste');
+              console.log(teste);
+            },
           },
         ]}
       />
