@@ -166,7 +166,14 @@ export default function Overview() {
             bg: '$red6',
             onPress: () => navigation.navigate('Register', { type: 'Despesa', bg: theme.red6.val }),
             onPressFast: async () => {
-              const teste = await category.all();
+              const teste = await category.update(
+                {
+                  name: 'Renda Fixa',
+                  icon_name: 'phishing',
+                  tipo: CategoryType.investimento,
+                },
+                4
+              );
               console.log(JSON.stringify(teste));
             },
           },
@@ -178,11 +185,7 @@ export default function Overview() {
               navigation.navigate('Register', { type: 'Investimento', bg: theme.orange6.val }),
             onPressFast: async () => {
               const teste = await category.get({
-                filters: [
-                  { field: 'id', operation: '=', value: 4 },
-                  { field: 'name', operation: '=', value: 'Teste' },
-                  { field: 'icon_name', operation: '=', value: 'search' },
-                ],
+                filters: [{ field: 'id', operation: '=', value: 4 }],
               });
               console.log(JSON.stringify(teste));
             },

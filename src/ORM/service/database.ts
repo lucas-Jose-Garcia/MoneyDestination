@@ -20,6 +20,7 @@ interface DatabaseService {
   dropTable: (name: string) => void;
   insert: <T extends object>(model: TableProps<T>, values: T) => void;
   select: <T extends object>(model: TableProps<T>, dataSelect?: SelectProps<T>) => void;
+  update: <T extends object>(model: TableProps<T>, values: T, id: number) => void;
 }
 
 const databaseOperations: DatabaseService = {
@@ -87,6 +88,24 @@ const databaseOperations: DatabaseService = {
     console.log(sql);
     const result = await executeTransaction(sql);
     return result;
+  },
+  update: async (model, values, id) => {
+    const variables: (string | number | null)[] = [];
+    let sql = `UPDATE ${model.name} SET `;
+
+    model.columns.forEach((column) => {
+      sql += `${String(column.name)} = ?,`;
+      //TODO: Verificar se tem uma forma melhor de garantir o tipo do valor sem usar as string | number | null
+      variables.push(values[column.name] as string | number | null);
+    });
+
+    sql = sql.slice(0, -1) + ` WHERE id = ${id}`;
+
+    console.log(sql);
+
+    const result = await executeTransaction(sql, variables);
+
+    return { rowsAffected: result.rowsAffected };
   },
 };
 

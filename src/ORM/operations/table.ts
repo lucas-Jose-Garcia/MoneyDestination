@@ -32,4 +32,8 @@ export default class Table<T extends object> {
   public async get(filters: SelectProps<T>) {
     return databaseService.select<T>(this.model, filters);
   }
+
+  public async update(values: T, id: number) {
+    return databaseService.update(this.model, values, id);
+  }
 }
