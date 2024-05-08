@@ -166,7 +166,7 @@ export default function Overview() {
             bg: '$red6',
             onPress: () => navigation.navigate('Register', { type: 'Despesa', bg: theme.red6.val }),
             onPressFast: async () => {
-              const teste = await databaseService.select('teste');
+              const teste = await databaseService.select('category');
               console.log(JSON.stringify(teste));
             },
           },

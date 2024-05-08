@@ -1,7 +1,7 @@
 import { databaseService } from '../service/database';
-import { TableProps } from '../types';
+import { TableBase, TableProps } from '../types';
 
-export default class Table<T extends object> {
+export default class Table<T extends TableBase> {
   model: TableProps<T>;
 
   constructor(model: TableProps<T>) {
