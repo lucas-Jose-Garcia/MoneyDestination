@@ -6,7 +6,6 @@ import { useTheme } from 'tamagui';
 
 import { RootDrawerParamList } from '../navigation';
 
-import Table from '~/ORM/operations/table';
 import { FabButton } from '~/components/FabButton';
 import { CircleProgress } from '~/components/ProgressCircle';
 import { ScreenContent } from '~/components/ScreenContent';
