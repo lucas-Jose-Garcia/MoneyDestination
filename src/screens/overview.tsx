@@ -166,7 +166,7 @@ export default function Overview() {
             bg: '$red6',
             onPress: () => navigation.navigate('Register', { type: 'Despesa', bg: theme.red6.val }),
             onPressFast: async () => {
-              const teste = await databaseService.select('category');
+              const teste = await category.all();
               console.log(JSON.stringify(teste));
             },
           },
@@ -176,7 +176,12 @@ export default function Overview() {
             bg: '$orange6',
             onPress: () =>
               navigation.navigate('Register', { type: 'Investimento', bg: theme.orange6.val }),
-            onPressFast: async () => {},
+            onPressFast: async () => {
+              const teste = await category.get({
+                filters: [{ field: 'id', operation: '=', value: 4 }],
+              });
+              console.log(JSON.stringify(teste));
+            },
           },
         ]}
       />

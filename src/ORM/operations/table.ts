@@ -1,7 +1,7 @@
-import { databaseService } from '../service/database';
-import { TableBase, TableProps } from '../types';
+import { SelectProps, databaseService } from '../service/database';
+import { TableProps } from '../types';
 
-export default class Table<T extends TableBase> {
+export default class Table<T extends object> {
   model: TableProps<T>;
 
   constructor(model: TableProps<T>) {
@@ -26,6 +26,10 @@ export default class Table<T extends TableBase> {
   }
 
   public async all() {
-    return databaseService.select(this.model.name);
+    return databaseService.select(this.model, {});
+  }
+
+  public async get(filters: SelectProps<T>) {
+    return databaseService.select<T>(this.model, filters);
   }
 }

@@ -1,11 +1,29 @@
 import { executeTransaction } from '~/ORM/sqlite';
-import { TableBase, TableProps } from '~/ORM/types';
+import { CompleteTableProps, TableProps } from '~/ORM/types';
+import { CategoryProps } from '~/types/Tables/Category';
+
+type OperationProps = '=';
+
+interface FiltersProps<T extends object> {
+  field: keyof CompleteTableProps<T>;
+  operation: OperationProps;
+  value: string | number | null;
+}
+
+export interface SelectProps<T extends object> {
+  columns?: (keyof T)[];
+  filters?: FiltersProps<T>[];
+}
+
+const operations: { [key in OperationProps]: string } = {
+  '=': ' = ',
+};
 
 interface DatabaseService {
-  createTable: <T extends TableBase>(model: TableProps<T>) => void;
+  createTable: <T extends object>(model: TableProps<T>) => void;
   dropTable: (name: string) => void;
-  insert: <T extends TableBase>(model: TableProps<T>, values: T) => void;
-  select: (name: string) => void;
+  insert: <T extends object>(model: TableProps<T>, values: T) => void;
+  select: <T extends object>(model: TableProps<T>, dataSelect?: SelectProps<T>) => void;
 }
 
 const databaseOperations: DatabaseService = {
@@ -36,7 +54,8 @@ const databaseOperations: DatabaseService = {
 
     model.columns.forEach((column) => {
       sql += `?,`;
-      variables.push(values[column.name]);
+      //TODO: Verificar se tem uma forma melhor de garantir o tipo do valor sem usar as string | number | null
+      variables.push(values[column.name] as string | number | null);
     });
 
     sql = sql.slice(0, -1) + ');';
@@ -47,8 +66,34 @@ const databaseOperations: DatabaseService = {
 
     return { insertId: result.insertId };
   },
-  select: async (name) => {
-    const sql = `SELECT * FROM ${name}`;
+  select: async (model, data) => {
+    let sql = `SELECT`;
+
+    if (data && data.columns && data.columns.length > 0) {
+      data.columns.forEach((column) => {
+        sql += ` ${String(column)},`;
+      });
+    } else {
+      sql += ' * ';
+    }
+
+    sql = sql.slice(0, -1) + `  FROM ${model.name}`;
+
+    if (data && data.filters && data.filters.length > 0) {
+      const oneFilter = data.filters[0];
+      sql += ` WHERE ${String(oneFilter.field)}${operations[oneFilter.operation]}${typeof oneFilter.value === 'string' ? `'${oneFilter.value}'` : oneFilter.value}`;
+
+      if (data.filters.length > 1) {
+        data.filters.forEach((filter, index) => {
+          if (index > 0) {
+            //TODO:APLICAR_DEMAIS_CONDICOES
+            sql += ` AND`;
+          }
+        });
+      }
+    }
+
+    console.log(sql);
     const result = await executeTransaction(sql);
     return result;
   },
