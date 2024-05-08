@@ -36,4 +36,8 @@ export default class Table<T extends object> {
   public async update(values: T, id: number) {
     return databaseService.update(this.model, values, id);
   }
+
+  public async delete(id: number) {
+    return databaseService.delete(this.model, id);
+  }
 }

@@ -1,6 +1,5 @@
 import { executeTransaction } from '~/ORM/sqlite';
 import { CompleteTableProps, TableProps } from '~/ORM/types';
-import { CategoryProps } from '~/types/Tables/Category';
 
 type OperationProps = '=';
 
@@ -21,6 +20,7 @@ interface DatabaseService {
   insert: <T extends object>(model: TableProps<T>, values: T) => void;
   select: <T extends object>(model: TableProps<T>, dataSelect?: SelectProps<T>) => void;
   update: <T extends object>(model: TableProps<T>, values: T, id: number) => void;
+  delete: <T extends object>(model: TableProps<T>, id: number) => void;
 }
 
 const databaseOperations: DatabaseService = {
@@ -106,6 +106,12 @@ const databaseOperations: DatabaseService = {
     const result = await executeTransaction(sql, variables);
 
     return { rowsAffected: result.rowsAffected };
+  },
+  delete: async (model, id) => {
+    const sql = `DELETE FROM ${model.name} WHERE id = ${id};`;
+    const result = await executeTransaction(sql);
+
+    return result;
   },
 };
 

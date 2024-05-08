@@ -7,15 +7,12 @@ import { useTheme } from 'tamagui';
 import { RootDrawerParamList } from '../navigation';
 
 import Table from '~/ORM/operations/table';
-import { databaseService } from '~/ORM/service/database';
-import { TableProps } from '~/ORM/types';
 import { FabButton } from '~/components/FabButton';
 import { CircleProgress } from '~/components/ProgressCircle';
 import { ScreenContent } from '~/components/ScreenContent';
 import { SheetOptions } from '~/components/SheetOptions';
 import { SummaryCard } from '~/components/SummaryCard';
 import { SummaryIcon } from '~/components/SummaryCard/SummaryIcon';
-import { CategoryProps, CategoryType } from '~/types/Tables/Category';
 
 type OverviewScreenNavigationProps = DrawerNavigationProp<RootDrawerParamList, 'Overview'>;
 
@@ -25,17 +22,6 @@ export default function Overview() {
   const navigation = useNavigation<OverviewScreenNavigationProps>();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
-
-  //REMOVE_CODE
-  const categoryModel: TableProps<CategoryProps> = {
-    name: 'category',
-    columns: [
-      { name: 'name', type: 'varchar', limit: 100, not_null: true },
-      { name: 'icon_name', type: 'varchar', limit: 100, not_null: true },
-      { name: 'tipo', type: 'varchar', limit: 50, not_null: true },
-    ],
-  };
-  const category = new Table<CategoryProps>(categoryModel);
 
   return (
     <>
@@ -152,30 +138,14 @@ export default function Overview() {
             bg: '$green6',
             onPress: () =>
               navigation.navigate('Register', { type: 'Receita', bg: theme.green6.val }),
-            onPressFast: async () => {
-              await category.create({
-                name: 'Teste',
-                icon_name: 'search',
-                tipo: CategoryType.receita,
-              });
-            },
+            onPressFast: async () => {},
           },
           {
             text: 'Despesa',
             icon: 'minus-circle',
             bg: '$red6',
             onPress: () => navigation.navigate('Register', { type: 'Despesa', bg: theme.red6.val }),
-            onPressFast: async () => {
-              const teste = await category.update(
-                {
-                  name: 'Renda Fixa',
-                  icon_name: 'phishing',
-                  tipo: CategoryType.investimento,
-                },
-                4
-              );
-              console.log(JSON.stringify(teste));
-            },
+            onPressFast: async () => {},
           },
           {
             text: 'Investimento',
@@ -183,12 +153,7 @@ export default function Overview() {
             bg: '$orange6',
             onPress: () =>
               navigation.navigate('Register', { type: 'Investimento', bg: theme.orange6.val }),
-            onPressFast: async () => {
-              const teste = await category.get({
-                filters: [{ field: 'id', operation: '=', value: 4 }],
-              });
-              console.log(JSON.stringify(teste));
-            },
+            onPressFast: async () => {},
           },
         ]}
       />
