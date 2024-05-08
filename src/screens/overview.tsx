@@ -178,7 +178,11 @@ export default function Overview() {
               navigation.navigate('Register', { type: 'Investimento', bg: theme.orange6.val }),
             onPressFast: async () => {
               const teste = await category.get({
-                filters: [{ field: 'id', operation: '=', value: 4 }],
+                filters: [
+                  { field: 'id', operation: '=', value: 4 },
+                  { field: 'name', operation: '=', value: 'Teste' },
+                  { field: 'icon_name', operation: '=', value: 'search' },
+                ],
               });
               console.log(JSON.stringify(teste));
             },

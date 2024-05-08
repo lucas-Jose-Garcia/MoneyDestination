@@ -15,10 +15,6 @@ export interface SelectProps<T extends object> {
   filters?: FiltersProps<T>[];
 }
 
-const operations: { [key in OperationProps]: string } = {
-  '=': ' = ',
-};
-
 interface DatabaseService {
   createTable: <T extends object>(model: TableProps<T>) => void;
   dropTable: (name: string) => void;
@@ -80,17 +76,12 @@ const databaseOperations: DatabaseService = {
     sql = sql.slice(0, -1) + `  FROM ${model.name}`;
 
     if (data && data.filters && data.filters.length > 0) {
-      const oneFilter = data.filters[0];
-      sql += ` WHERE ${String(oneFilter.field)}${operations[oneFilter.operation]}${typeof oneFilter.value === 'string' ? `'${oneFilter.value}'` : oneFilter.value}`;
+      sql += ` WHERE`;
 
-      if (data.filters.length > 1) {
-        data.filters.forEach((filter, index) => {
-          if (index > 0) {
-            //TODO:APLICAR_DEMAIS_CONDICOES
-            sql += ` AND`;
-          }
-        });
-      }
+      data.filters.forEach((filter, index) => {
+        if (index > 0) sql += ` AND`;
+        sql += ` ${String(filter.field)} ${filter.operation} ${typeof filter.value === 'string' ? `'${filter.value}'` : filter.value}`;
+      });
     }
 
     console.log(sql);
