@@ -1,9 +1,11 @@
 import { Button, H4, ScrollView, View, XStack, YStack, Text, useTheme, ColorTokens } from 'tamagui';
 
-import { ButtonIcon, MaterialIconsName } from '../ButtonIcon';
+import { ButtonIcon } from '../ButtonIcon';
 import { InputText } from '../InputText';
 import { Sheet } from '../Sheet';
 import { ColorsOptions } from '../values/customColors';
+
+import { MaterialIconsName } from '~/types/Tables/Category';
 
 export type TypeCategory = 'Receita' | 'Despesa' | 'Investimento';
 
@@ -17,6 +19,7 @@ export interface SheetCategoriesProps {
     val: string | null;
     setVal: React.Dispatch<React.SetStateAction<MaterialIconsName | null>>;
   };
+  onAction: () => void;
 }
 
 type MaterialGroupNames<T extends string> = {
@@ -30,6 +33,7 @@ export function SheetCategories({
   category,
   color,
   icon,
+  onAction,
 }: SheetCategoriesProps) {
   const theme = useTheme();
   const colors = {
@@ -174,7 +178,7 @@ export function SheetCategories({
           <InputText label="Descrição" val={category.val} setVal={category.setVal} />
           <ScrollView h="$18" showsVerticalScrollIndicator={false}>
             {Object.keys(materialGroupNames).map((nameGroup) => (
-              <XStack>
+              <XStack key={nameGroup}>
                 <YStack>
                   <Text color="$color" pt="$3" pb="$2">
                     {nameGroup}
@@ -200,7 +204,7 @@ export function SheetCategories({
               </XStack>
             ))}
           </ScrollView>
-          <Button bg={colors[color]} mt="$4">
+          <Button bg={colors[color]} mt="$4" onPress={onAction}>
             Salvar
           </Button>
         </YStack>

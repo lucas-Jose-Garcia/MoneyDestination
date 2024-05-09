@@ -11,5 +11,6 @@ export enum CategoryType {
 export interface CategoryProps {
   name: string;
   icon_name: MaterialIconsName;
-  tipo: CategoryType;
+  type: CategoryType;
+  active: 0 | 1;
 }

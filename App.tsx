@@ -10,6 +10,8 @@ import { TamaguiProvider, Theme } from 'tamagui';
 import RootStack from './src/navigation';
 import config from './tamagui.config';
 
+import { DatabaseProvider } from '~/contexts/databaseContext';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -33,7 +35,9 @@ export default function App() {
   return (
     <TamaguiProvider config={config}>
       <Theme name={themeName}>
-        <RootStack />
+        <DatabaseProvider>
+          <RootStack />
+        </DatabaseProvider>
       </Theme>
       <StatusBar style={themeName === 'light' ? 'dark' : 'light'} translucent />
     </TamaguiProvider>

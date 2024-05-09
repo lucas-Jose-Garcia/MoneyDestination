@@ -18,7 +18,10 @@ interface DatabaseService {
   createTable: <T extends object>(model: TableProps<T>) => void;
   dropTable: (name: string) => void;
   insert: <T extends object>(model: TableProps<T>, values: T) => void;
-  select: <T extends object>(model: TableProps<T>, dataSelect?: SelectProps<T>) => void;
+  select: <T extends object>(
+    model: TableProps<T>,
+    dataSelect?: SelectProps<T>
+  ) => Promise<CompleteTableProps<T>[]>;
   update: <T extends object>(model: TableProps<T>, values: T, id: number) => void;
   delete: <T extends object>(model: TableProps<T>, id: number) => void;
 }
@@ -63,7 +66,7 @@ const databaseOperations: DatabaseService = {
 
     return { insertId: result.insertId };
   },
-  select: async (model, data) => {
+  select: async <T extends object>(model: TableProps<T>, data?: SelectProps<T>) => {
     let sql = `SELECT`;
 
     if (data && data.columns && data.columns.length > 0) {
@@ -87,7 +90,7 @@ const databaseOperations: DatabaseService = {
 
     console.log(sql);
     const result = await executeTransaction(sql);
-    return result;
+    return result.rows._array as CompleteTableProps<T>[];
   },
   update: async (model, values, id) => {
     const variables: (string | number | null)[] = [];

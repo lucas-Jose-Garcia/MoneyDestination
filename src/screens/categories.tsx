@@ -1,15 +1,14 @@
-import React, { useRef, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
-import PagerView, { PagerViewOnPageSelectedEvent } from 'react-native-pager-view';
 import { ScrollView, View } from 'tamagui';
 
 import { FabButton } from '~/components/FabButton';
 import { ScreenContent } from '~/components/ScreenContent';
-import { SheetCategories, TypeCategory } from '~/components/SheetCategories';
+import { SheetCategories } from '~/components/SheetCategories';
 import { TabView } from '~/components/TabView';
 import { Tag, TagProps } from '~/components/Tag';
-import { ColorsOptions } from '~/components/values/customColors';
-import { MaterialIconsName } from '~/types/Tables/Category';
+import { useCategories } from '~/hooks/Categories';
 
 const mockReceitas: TagProps[] = [
   {
@@ -123,30 +122,20 @@ const mockInvestimentos: TagProps[] = [
 ];
 
 export default function Categories() {
-  const refPagerView = useRef<PagerView>(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const colorsButton: ColorsOptions[] = ['green', 'red', 'orange'];
-  const typeCategory: TypeCategory[] = ['Receita', 'Despesa', 'Investimento'];
+  const { refs, states, list, data, onPageSelected, toggleModal, handleAction, fetchData } =
+    useCategories();
 
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [category, setCategory] = useState('');
-  const [activeIcon, setActiveIcon] = useState<MaterialIconsName | null>(null);
-
-  const onPageSelected = (event: PagerViewOnPageSelectedEvent) => {
-    const { position } = event.nativeEvent;
-    setCurrentPage(position);
-  };
-
-  const toggleModal = () => {
-    setIsOpenModal((prevState) => !prevState);
-  };
-
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
   return (
     <>
       <ScreenContent>
         <TabView
-          ref={refPagerView}
-          currentIndex={currentPage}
+          ref={refs.refPagerView}
+          currentIndex={states.currentPage}
           onPageSelected={onPageSelected}
           itens={[
             {
@@ -168,27 +157,24 @@ export default function Categories() {
           <View style={styles.page} key="1">
             <ScrollView showsVerticalScrollIndicator={false}>
               <View flex={1} gap="$3" pb="$12">
-                {mockReceitas.map((item) => (
-                  <Tag key={item.label} {...item} />
-                ))}
+                {list.dataReceitas &&
+                  list.dataReceitas.map((item) => <Tag key={item.label} {...item} />)}
               </View>
             </ScrollView>
           </View>
           <View style={styles.page} key="2">
             <ScrollView showsVerticalScrollIndicator={false}>
               <View flex={1} gap="$3" pb="$12">
-                {mockDespesas.map((item) => (
-                  <Tag key={item.label} {...item} />
-                ))}
+                {list.dataDespesas &&
+                  list.dataDespesas.map((item) => <Tag key={item.label} {...item} />)}
               </View>
             </ScrollView>
           </View>
           <View style={styles.page} key="3">
             <ScrollView showsVerticalScrollIndicator={false}>
               <View flex={1} gap="$3" pb="$12">
-                {mockInvestimentos.map((item) => (
-                  <Tag key={item.label} {...item} />
-                ))}
+                {list.dataInvestimento &&
+                  list.dataInvestimento.map((item) => <Tag key={item.label} {...item} />)}
               </View>
             </ScrollView>
           </View>
@@ -196,17 +182,18 @@ export default function Categories() {
       </ScreenContent>
       <FabButton
         icon="plus"
-        bg={colorsButton[currentPage]}
+        bg={data.colorsButton[states.currentPage]}
         whichSide="right"
         onPress={toggleModal}
       />
       <SheetCategories
-        color={colorsButton[currentPage]}
-        open={isOpenModal}
-        onOpenChange={setIsOpenModal}
-        type={typeCategory[currentPage]}
-        category={{ val: category, setVal: setCategory }}
-        icon={{ val: activeIcon, setVal: setActiveIcon }}
+        color={data.colorsButton[states.currentPage]}
+        open={states.isOpenModal}
+        onOpenChange={states.setIsOpenModal}
+        type={data.typeCategory[states.currentPage]}
+        category={{ val: states.name, setVal: states.setName }}
+        icon={{ val: states.activeIcon, setVal: states.setActiveIcon }}
+        onAction={handleAction}
       />
     </>
   );
