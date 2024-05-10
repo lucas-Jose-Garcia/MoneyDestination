@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
 import { TamaguiProvider, Theme } from 'tamagui';
 
 import RootStack from './src/navigation';
@@ -36,7 +37,9 @@ export default function App() {
     <TamaguiProvider config={config}>
       <Theme name={themeName}>
         <DatabaseProvider>
-          <RootStack />
+          <MenuProvider>
+            <RootStack />
+          </MenuProvider>
         </DatabaseProvider>
       </Theme>
       <StatusBar style={themeName === 'light' ? 'dark' : 'light'} translucent />

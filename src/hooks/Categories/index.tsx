@@ -65,8 +65,23 @@ export function useCategories() {
     }
 
     fetchData();
-    toggleModal();
+    setIsOpenModal(false);
     clearFields();
+  };
+
+  const handleEditing = async (id: number) => {
+    const data = await category.get({ filters: [{ field: 'id', operation: '=', value: id }] });
+
+    setCurrentId(id);
+    setName(data[0].name);
+    setActiveIcon(data[0].icon_name);
+
+    setIsOpenModal(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    await category.delete(id);
+    fetchData();
   };
 
   const clearFields = () => {
@@ -116,6 +131,8 @@ export function useCategories() {
         label: item.name,
         value: 0,
         onPress: () => {},
+        onEditing: () => handleEditing(item.id),
+        onDelete: () => handleDelete(item.id),
       };
       return tag;
     });
@@ -145,5 +162,7 @@ export function useCategories() {
     toggleModal,
     handleAction,
     fetchData,
+    handleEditing,
+    handleDelete,
   };
 }

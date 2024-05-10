@@ -1,5 +1,6 @@
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
 import { ColorTokens, Text, View, XStack, YStack, useTheme } from 'tamagui';
 
 import { helper } from '~/utils/helper';
@@ -12,11 +13,15 @@ export interface TagProps {
   label: string;
   value: number;
   onPress: () => void;
+  onEditing: () => void;
+  onDelete: () => void;
 }
 
-export function Tag({ icon, label, value, onPress }: TagProps) {
+export function Tag({ icon, label, value, onPress, onEditing, onDelete }: TagProps) {
   const theme = useTheme();
   const color = theme.color.val;
+  const backgroundFocus = theme.backgroundFocus.val;
+
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
       <XStack gap="$3" px="$2.5">
@@ -32,9 +37,26 @@ export function Tag({ icon, label, value, onPress }: TagProps) {
               {helper.format.currency(value)}
             </Text>
           </YStack>
-          <TouchableOpacity>
-            <Entypo name="dots-three-vertical" size={20} color={color} />
-          </TouchableOpacity>
+
+          <View>
+            <Menu>
+              <MenuTrigger>
+                <Entypo name="dots-three-vertical" size={20} color={color} />
+              </MenuTrigger>
+              <MenuOptions optionsContainerStyle={{ backgroundColor: backgroundFocus }}>
+                <MenuOption onSelect={onEditing}>
+                  <View p="$2">
+                    <Text color="$color">Editar</Text>
+                  </View>
+                </MenuOption>
+                <MenuOption onSelect={onDelete}>
+                  <View p="$2">
+                    <Text color="$color">Deletar</Text>
+                  </View>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          </View>
         </XStack>
       </XStack>
     </TouchableOpacity>
