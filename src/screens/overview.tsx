@@ -2,8 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { Menu, MenuOption, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
-import { Text, View, useTheme } from 'tamagui';
+import { useTheme } from 'tamagui';
 
 import { RootDrawerParamList } from '../navigation';
 
