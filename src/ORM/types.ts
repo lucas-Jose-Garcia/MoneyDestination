@@ -1,5 +1,3 @@
-import { CategoryProps } from '~/types/Tables/Category';
-
 export interface TableBase {
   [key: string]: string | number | null;
 }
@@ -21,8 +19,10 @@ interface ColumnIntergerProps<T extends object> extends BaseColumnProps<T> {
 
 type ColumnProps<T extends object> = ColumnVarcharProps<T> | ColumnIntergerProps<T>;
 
+export type NameOfTables = 'category' | 'parameters';
+
 export interface TableProps<T extends object> {
-  name: string;
+  name: NameOfTables;
   columns: ColumnProps<T>[];
 }
 

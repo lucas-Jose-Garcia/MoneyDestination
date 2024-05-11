@@ -9,9 +9,30 @@ import { TagProps } from '~/components/Tag';
 import { ColorsOptions } from '~/components/values/customColors';
 import { DatabaseContext, DatabaseContextProps } from '~/contexts/databaseContext';
 import { CategoryProps, CategoryType, MaterialIconsName } from '~/types/Tables/Category';
+import { CodeParameter } from '~/types/Tables/Parameters';
+
+const baseData: CategoryProps[] = [
+  { name: 'Salário', icon_name: 'attach-money', type: CategoryType.receita, active: 1 },
+  { name: 'Adiantamento', icon_name: 'attach-money', type: CategoryType.receita, active: 1 },
+  { name: 'Adicionais', icon_name: 'attach-money', type: CategoryType.receita, active: 1 },
+  { name: 'Renda Extra', icon_name: 'attach-money', type: CategoryType.receita, active: 1 },
+  { name: 'Alimentação', icon_name: 'restaurant-menu', type: CategoryType.gasto, active: 1 },
+  { name: 'Lanches', icon_name: 'fastfood', type: CategoryType.gasto, active: 1 },
+  { name: 'Carro', icon_name: 'car-repair', type: CategoryType.gasto, active: 1 },
+  { name: 'Saúde', icon_name: 'health-and-safety', type: CategoryType.gasto, active: 1 },
+  { name: 'Vestuário', icon_name: 'checkroom', type: CategoryType.gasto, active: 1 },
+  { name: 'Utilidades', icon_name: 'home-mini', type: CategoryType.gasto, active: 1 },
+  { name: 'Doações', icon_name: 'volunteer-activism', type: CategoryType.gasto, active: 1 },
+  { name: 'Lazer', icon_name: 'beach-access', type: CategoryType.gasto, active: 1 },
+  { name: 'Reserva', icon_name: 'attach-money', type: CategoryType.investimento, active: 1 },
+  { name: 'Ações', icon_name: 'trending-up', type: CategoryType.investimento, active: 1 },
+  { name: 'FIs', icon_name: 'domain', type: CategoryType.investimento, active: 1 },
+  { name: 'Previdência', icon_name: 'elderly', type: CategoryType.investimento, active: 1 },
+  { name: 'Metas', icon_name: 'track-changes', type: CategoryType.investimento, active: 1 },
+];
 
 export function useCategories() {
-  const { category } = useContext(DatabaseContext) as DatabaseContextProps;
+  const { category, parameters } = useContext(DatabaseContext) as DatabaseContextProps;
 
   const refPagerView = useRef<PagerView>(null);
 
@@ -82,6 +103,25 @@ export function useCategories() {
   const handleDelete = async (id: number) => {
     await category.delete(id);
     fetchData();
+  };
+
+  const handleInsertBaseData = async () => {
+    const BASE_DATA_INSERTED = await parameters.get({
+      filters: [{ field: 'code', operation: '=', value: CodeParameter.BASE_DATA_INSERTED }],
+    });
+
+    if (BASE_DATA_INSERTED.length > 0 && BASE_DATA_INSERTED[0].value === 'INSERTED') {
+      Alert.alert('Categorias', 'Categorias padrões já foram inseridas.');
+      return;
+    }
+
+    await category.create(baseData);
+
+    Alert.alert('Categorias', 'Categorias base importadas com sucesso.', [
+      { text: 'OK', onPress: async () => await fetchData() },
+    ]);
+
+    await parameters.create({ code: CodeParameter.BASE_DATA_INSERTED, value: 'INSERTED' });
   };
 
   const clearFields = () => {
@@ -164,5 +204,6 @@ export function useCategories() {
     fetchData,
     handleEditing,
     handleDelete,
+    handleInsertBaseData,
   };
 }

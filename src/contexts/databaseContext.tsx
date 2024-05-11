@@ -3,9 +3,11 @@ import { ReactNode, createContext } from 'react';
 import Table from '~/ORM/operations/table';
 import { TableProps } from '~/ORM/types';
 import { CategoryProps } from '~/types/Tables/Category';
+import { ParametersProps } from '~/types/Tables/Parameters';
 
 export interface DatabaseContextProps {
   category: Table<CategoryProps>;
+  parameters: Table<ParametersProps>;
 }
 
 interface DatabaseProviderProps {
@@ -24,7 +26,19 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
       { name: 'active', type: 'interger', not_null: true },
     ],
   };
-  const category = new Table<CategoryProps>(categoryModel);
 
-  return <DatabaseContext.Provider value={{ category }}>{children}</DatabaseContext.Provider>;
+  const parametersModel: TableProps<ParametersProps> = {
+    name: 'parameters',
+    columns: [
+      { name: 'code', type: 'varchar', limit: 100, not_null: true },
+      { name: 'value', type: 'varchar', limit: 100, not_null: true },
+    ],
+  };
+
+  const category = new Table<CategoryProps>(categoryModel);
+  const parameters = new Table<ParametersProps>(parametersModel);
+
+  return (
+    <DatabaseContext.Provider value={{ category, parameters }}>{children}</DatabaseContext.Provider>
+  );
 }

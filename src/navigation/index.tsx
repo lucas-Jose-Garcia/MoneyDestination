@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { useTheme } from 'tamagui';
@@ -6,6 +7,7 @@ import { CustomDrawerContent } from './CustomDrawerContent';
 import { CustomHeader } from './CustomHeader';
 import { BackButton } from '../components/BackButton';
 
+import { useCategories } from '~/hooks/Categories';
 import Categories from '~/screens/categories';
 import Overview from '~/screens/overview';
 import Register from '~/screens/register';
@@ -19,6 +21,7 @@ export type RootDrawerParamList = {
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function RootStack() {
+  const { handleInsertBaseData } = useCategories();
   const theme = useTheme();
   return (
     <NavigationContainer>
@@ -31,7 +34,22 @@ export default function RootStack() {
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}>
         <Drawer.Screen name="Overview" component={Overview} options={{ title: 'Visão Geral' }} />
-        <Drawer.Screen name="Categories" component={Categories} options={{ title: 'Categorias' }} />
+        <Drawer.Screen
+          name="Categories"
+          component={Categories}
+          options={{
+            title: 'Categorias',
+            headerRight: () => (
+              <MaterialCommunityIcons
+                name="android-messages"
+                size={24}
+                color={theme.color.val}
+                style={{ paddingRight: 20 }}
+                onPress={handleInsertBaseData}
+              />
+            ),
+          }}
+        />
         <Drawer.Screen
           name="Register"
           component={Register}

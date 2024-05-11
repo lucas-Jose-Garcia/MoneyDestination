@@ -1,5 +1,5 @@
 import { executeTransaction } from '~/ORM/sqlite';
-import { CompleteTableProps, TableProps } from '~/ORM/types';
+import { CompleteTableProps, NameOfTables, TableProps } from '~/ORM/types';
 
 type OperationProps = '=';
 
@@ -14,13 +14,22 @@ export interface SelectProps<T extends object> {
   filters?: FiltersProps<T>[];
 }
 
+export interface JoinProps<T extends object> extends SelectProps<T> {
+  tableName: NameOfTables;
+}
+
 interface DatabaseService {
   createTable: <T extends object>(model: TableProps<T>) => void;
   dropTable: (name: string) => void;
-  insert: <T extends object>(model: TableProps<T>, values: T) => void;
+  insert: <T extends object>(model: TableProps<T>, values: T | T[]) => void;
   select: <T extends object>(
     model: TableProps<T>,
     dataSelect?: SelectProps<T>
+  ) => Promise<CompleteTableProps<T>[]>;
+  join?: <T extends object, K extends object>(
+    model: TableProps<T>,
+    dataSelect?: SelectProps<T>,
+    dataJoin?: SelectProps<K>
   ) => Promise<CompleteTableProps<T>[]>;
   update: <T extends object>(model: TableProps<T>, values: T, id: number) => void;
   delete: <T extends object>(model: TableProps<T>, id: number) => void;
@@ -52,19 +61,25 @@ const databaseOperations: DatabaseService = {
 
     sql = sql.slice(0, -1) + ') values (';
 
-    model.columns.forEach((column) => {
-      sql += `?,`;
-      //TODO: Verificar se tem uma forma melhor de garantir o tipo do valor sem usar as string | number | null
-      variables.push(values[column.name] as string | number | null);
-    });
+    if (!Array.isArray(values)) values = [values];
 
-    sql = sql.slice(0, -1) + ');';
+    values.map((value, index) => {
+      if (index > 0) sql += ', (';
+      model.columns.forEach((column) => {
+        sql += `?,`;
+        //TODO: Verificar se tem uma forma melhor de garantir o tipo do valor sem usar as string | number | null
+        variables.push(value[column.name] as string | number | null);
+      });
+
+      sql = sql.slice(0, -1) + ')';
+    });
 
     console.log(sql);
 
     const result = await executeTransaction(sql, variables);
 
     return { insertId: result.insertId };
+    //return { insertId: 0 };
   },
   select: async <T extends object>(model: TableProps<T>, data?: SelectProps<T>) => {
     let sql = `SELECT`;

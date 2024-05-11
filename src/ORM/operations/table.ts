@@ -21,23 +21,25 @@ export default class Table<T extends object> {
     await databaseService.dropTable(this.model.name);
   }
 
-  public async create(values: T) {
+  public async create(values: T | T[]) {
     await databaseService.insert<T>(this.model, values);
   }
 
   public async all() {
-    return databaseService.select(this.model, {});
+    return await databaseService.select(this.model, {});
   }
 
   public async get(filters: SelectProps<T>) {
-    return databaseService.select<T>(this.model, filters);
+    return await databaseService.select<T>(this.model, filters);
   }
 
+  public async join<K extends object>(filters: SelectProps<T>, joinFilters: SelectProps<K>) {}
+
   public async update(values: T, id: number) {
-    return databaseService.update(this.model, values, id);
+    return await databaseService.update(this.model, values, id);
   }
 
   public async delete(id: number) {
-    return databaseService.delete(this.model, id);
+    return await databaseService.delete(this.model, id);
   }
 }
